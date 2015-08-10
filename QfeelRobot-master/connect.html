@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detectio" />
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/connect.css">
+    <title>Connect</title>
+</head>
+<body onload="connecting()">
+	<center class="container">
+		<img src="./images/connect_logo.png" width="130px">
+		<img id="state" src="./images/waiting.png" width="130px;" style="display:block;margin-top: 30px;">
+		<div>
+			<input type="button" id="retry" class="form-control" value="重试" style="display: none">
+			<input type="button" id="confirm" class="form-control" value="确定" style="display: none">
+		</div>
+		<div>
+			<img id="unpair-submit" src="./images/cancel_pair.png" width="50px" style="margin-top: 30px;cursor: pointer">
+		</div>
+	</center>
+</body>
+<script src="js/jquery.min.js"></script>
+<script src="js/connect.js"></script>
+
+</html>

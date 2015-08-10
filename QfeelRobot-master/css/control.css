@@ -1,0 +1,93 @@
+/*@font-face {
+    font-family: 'fangzheng-hei';
+    src: url('../fonts/fangzheng-xihei.ttf');
+}*/
+
+body {
+    background: black;
+}
+
+#videoCanvas {
+    position: fixed;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+}
+
+#directions {
+    position: absolute;
+    bottom: 30px;
+    left: 20px;
+    height: 346px;
+    width: 140px;
+    background: transparent;
+}
+
+#speeds {
+    position: absolute;
+    bottom: 30px;
+    right: 20px;
+    height: 130px;
+    width: 105px;
+    background: transparent;
+}
+
+#speedstate {
+    margin-bottom: 0;
+    font-size: 2em;
+    color: white;
+    margin-left: 64px;
+}
+
+#attention {
+    margin-top: 62px;
+    display: none;
+    padding-top: 45px;
+    padding-left: 20px;
+    position: absolute;
+    margin-left: 10px;
+    width: 120px;
+    height: 220px;
+    background: url('../images/attentionUp.png') no-repeat;
+    background-size: 120px;
+}
+
+#attention span {
+    font-family: 'fangzheng-hei';
+    color: white;
+}
+
+#attentionRight{
+    display: none;
+    position: absolute;
+    margin-top: 258px;
+    margin-left: 91px;
+    width: 200px;
+    height: 65px;
+    background: url('../images/attentionRight.png') no-repeat;
+    background-size: auto 65px;
+}
+#battery {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    height: 100px;
+    width: 150px;
+    background: transparent;
+}
+
+#battery-state {
+    position: absolute;
+    display: inline-block;
+    padding: 0 !important;
+    margin-left: 70px;
+    color: white;
+    font-size: 1.0em;
+}
+
+#battery-img {
+	position: absolute;
+    display: inline-block;
+    margin-top: 3px;
+    margin-left: 110px;
+}

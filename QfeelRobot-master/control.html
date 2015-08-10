@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" >
+    <meta name="apple-mobile-web-app-capable" content="yes" >
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" >
+    <meta content="telephone=no" name="format-detectio" >
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/control.css">
+    <title>Control</title>
+</head>
+
+<body>
+<canvas id="videoCanvas">
+</canvas>
+<div id="battery">
+	<p id="battery-state">100%</p>
+	<img id="battery-img" src="./images/full.png" width="30px" >
+</div>
+<div id="directions">
+	<div id="attention">
+		<!-- 是否碰撞  start -->
+		<div>
+			<img id="bumperLeft" src="./images/normal.png" width="10px;">
+			<img src="./images/hitLeft.png" width="50px" style="margin-left: 10px;">
+		</div>
+		<div>
+			<img id="bumperRight" src="./images/normal.png" width="10px;">
+			<img src="./images/hitRight.png" width="50px;" style="margin-left: 10px;">
+		</div>
+		<div>
+			<img id="bumperCenter" src="./images/normal.png" width="10px;">
+			<img src="./images/hitCenter.png" width="50px;" style="margin-left: 10px;">
+		</div>
+		<!-- 是否碰撞  end -->
+		<!-- 是否被提起  start -->
+		<div style="margin-top: 8px;">
+			<img id="wheelDropLeft" src="./images/normal.png" width="10px;">
+			<img src="./images/wheelDropLeft.png" width="60px;" style="margin-left: 10px;">
+		</div>
+		<div>
+			<img id="wheelDropRight" src="./images/normal.png" width="10px;">
+			<img src="./images/wheelDropRight.png" width="60px;" style="margin-left: 10px;">
+		</div>
+		<!-- 是否被提起  end -->
+	
+	</div>
+
+	<div id="attentionRight">
+			<!-- 是否悬空  start -->
+		<div style="margin-top: 2px;margin-left: 55px;">
+			<img id="cliffLeft" src="./images/normal.png" width="10px;">
+			<img src="./images/cliffLeft.png" width="50px;" style="margin-left: 10px;">
+		</div>
+		<div style="margin-left: 55px;">
+			<img id="cliffRight" src="./images/normal.png" width="10px;">
+			<img src="./images/cliffRight.png" width="50px;" style="margin-left: 10px;">
+		</div>
+		<div style="margin-left: 55px;">
+			<img id="cliffCenter" src="./images/normal.png" width="10px;">
+			<img src="./images/cliffCenter.png" width="50px;" style="margin-left: 10px;">
+		</div>
+		<!-- 是否悬空  end -->
+	</div>
+	<img id="up" src="./images/up.png" width="120px" style="margin-top:223px;margin-left:10px;z-index: -1">
+	<img id="left" src="./images/left.png" width="40px" height="66px;" style="margin-top: -22px;margin-left: 10px;z-index: 0;">
+	<img id="center" src="./images/center_blue.png" width="43px;" style="margin-top: -22px; margin-left: -5px;z-index: 1">
+	<img id="right" src="./images/right.png" width="39px" height="65px;" style="margin-top: -22px;margin-left: -5px;z-index: 0">
+	<img id="down" src="./images/down.png" width="120px" style="margin-left: 10px;margin-top: -22px;z-index: -1">
+</div>
+<div id="speeds">
+	<img id="speedup" src="./images/add.png" width="43px" style="margin-left:50px">
+	<p id="speedstate">1</p>
+	<img id="speeddown" src="./images/dec.png" width="43px" style="margin-left: 50px;margin-top: 0px;">
+</div>
+</body>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/control.js"></script>    <!-- 电脑与手机点击控制机器人 -->
+	<script src="js/keypress-2.1.0.min.js"></script>   
+	<script src="js/key_control.js"></script>     <!-- 键盘控制机器人 -->
+	<script src="js/jsmpg.js"></script>
+	
+</html>

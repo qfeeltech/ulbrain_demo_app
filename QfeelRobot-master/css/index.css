@@ -1,0 +1,28 @@
+/*@font-face{
+	font-family: 'fangzheng-hei';
+	src: url('../fonts/fangzheng-xihei.ttf');
+}*/
+/*html,body{height: 100%;}*/
+body {
+	font-family: 'YaHei';
+    background: url('../images/background.png') no-repeat;
+    background-size: cover;
+    padding: 20px;
+}
+.container{
+	width: 90%;
+	padding-top: 20px;
+}
+.input-style{
+	color: white;
+	background: transparent;
+	border: 1px solid rgba(255,255,255,0.5);
+	margin-top: 10px;
+}
+#pair-submit{
+	margin-top: 20px;
+	background: orange;
+	border:none;
+	color: white;
+}
+
