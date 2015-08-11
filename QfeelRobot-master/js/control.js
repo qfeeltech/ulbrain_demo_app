@@ -53,7 +53,19 @@ window.onbeforeunload = function(e) {
     }).fail(function(data){
         console.log(data);
     });
+
+    $.ajax({
+            url:URL+'vlocalizationRgbdslam/stop?sessionID='+localStorage.sessionID,
+            type:'GET'
+        })
+        .done(function(){
+            console.log('OK');
+        })
+        .fail(function(){
+            console.log('bad request');
+        });
     //--------openni停止----end---------
+
 }
 
 function checkState() { //检查机器人状态
