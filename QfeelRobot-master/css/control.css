@@ -7,6 +7,9 @@ body {
     background: black;
 }
 
+#getPos {position: fixed;z-index: 1000;left: 10px;top: 10px;color: #fff;}
+#location {position: fixed;z-index: 1000;left: 60px;top:10px;border: 1px solid #fff;width: 180px;height: 30px;color: #fff; }
+
 #videoCanvas {
     position: fixed;
     background-size: cover;

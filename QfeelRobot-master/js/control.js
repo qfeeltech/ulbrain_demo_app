@@ -43,6 +43,17 @@ window.onbeforeunload = function(e) {
         console.log(data);
     });
     console.log('test');
+    
+    //--------openni停止----start-------
+    $.ajax({
+        url:URL+'openni/stop?sessionID='+localStorage.sessionID,
+        type:'GET'
+    }).done(function(data){
+        console.log(data);
+    }).fail(function(data){
+        console.log(data);
+    });
+    //--------openni停止----end---------
 }
 
 function checkState() { //检查机器人状态
@@ -251,31 +262,96 @@ $(document).ready(function() {
     //get video input start
     var WS;
     var flag = false;
-    //调用sensor/camera/0/getRGBStreamWS接口，请求视频流，html中使用canvas来显示
-    $.ajax({
-            url: URL+'sensor/camera/0/getRGBStreamWS?sessionID=' + localStorage.sessionID + '&format=mp4&width=320&height=240&rate=300',
-            type: 'GET',
-            dataType: 'json',
-            data: "",
-        })
-        .done(function(data) {
-            WS = data.webSocketURL;
-            console.log(WS);
-            console.log("success");
-            var canvas = document.getElementById('videoCanvas'); //取得页面中的Canvas元素
-            var client = new WebSocket(WS); //使用请求获得的URL新建一个WebSocket
-            var player = new jsmpeg(client, { //此处需要先调用jsmpg.js文件，按此方法调用jsmpeg()函数即可生成视频流
-                canvas: canvas,
-                autoplay: true
+
+    
+    $('#getPos').bind('click',function(){
+        if($(this).html()=='start')
+        {
+            //------------开启 RGBD SLAM定位------start-----------
+            $(this).html('stop');
+            $.ajax({
+                url:URL+'vlocalizationRgbdslam/start?sessionID='+localStorage.sessionID,
+                type:'GET'
+            })
+            .done(function(){
+                console.log('OK');
+               //------------获取定位--------start-------
+                $.ajax({
+                    url:URL+'vlocalizationRgbdslam/getLocation?sessionID='+localStorage.sessionID,
+                    type:'GET'
+                })
+                .done(function(){
+                    console.log('OK');
+                })
+                .always(function(data){
+                    $('#location').html('x:'+data.coord.x+' y:'+data.coord.y+' z:'+data.coord.z);
+                });
+                //------------获取定位--------end-------
+            })
+            .fail(function(){
+                console.log('bad request');
             });
-        })
-        .fail(function() {
-            console.log("error");
-        })
-        .always(function() {
-            console.log("complete");
-        });
-    //get video input end
+            //-----------开启 RGBD SLAM定位---end----------
+        }
+        else
+        {
+            //----------停止 RGBD SLAM定位----start----------          
+            $(this).html('start');
+            $.ajax({
+                url:URL+'vlocalizationRgbdslam/stop?sessionID='+localStorage.sessionID,
+                type:'GET'
+            })
+            .done(function(){
+                console.log('OK');
+            })
+            .fail(function(){
+                console.log('bad request');
+            });
+            //----------停止 RGBD SLAM定位----end----------   
+        }
+    });
+   
+
+
+    //----------openni启动start------------
+    $.ajax({
+        url:URL+'openni/start?sessionID='+localStorage.sessionID,
+        type:'GET'
+    }).done(
+        
+        //调用sensor/camera/0/getRGBStreamWS接口，请求视频流，html中使用canvas来显示
+        $.ajax({
+                url: URL+'sensor/camera/0/getRGBStreamWS?sessionID=' + localStorage.sessionID + '&format=mp4&width=320&height=240&rate=300',
+                type: 'GET',
+                dataType: 'json',
+                data: "",
+            })
+            .done(function(data) {
+                WS = data.webSocketURL;
+                console.log(WS);
+                console.log("success");
+                var canvas = document.getElementById('videoCanvas'); //取得页面中的Canvas元素
+                var client = new WebSocket(WS); //使用请求获得的URL新建一个WebSocket
+               
+                var player = new jsmpeg(client, { //此处需要先调用jsmpg.js文件，按此方法调用jsmpeg()函数即可生成视频流
+                    canvas: canvas,
+                    autoplay: true
+                });
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            })
+        //get video input end
+
+    )
+    .fail(function(){
+        console.log('fail');
+    });
+    //---------------openni 启动 end----------------
+        
 
     //控制事件开始
 
