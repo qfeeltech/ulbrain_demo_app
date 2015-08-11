@@ -14,6 +14,7 @@ var downLeft = false;
 var downRight = false;
 
 var moveTimeout=100;
+var getPosTime=200;//每次获取位置信息的时间
 var power; //电池电量
 var powerNum;
 var warning = false; //是否处于警告状态
@@ -36,37 +37,6 @@ var currLinearSpeed = 0 //直线速度
 var currAngularSpeed = 0 //转弯速度
 var sending = false //是否发送
 
-window.onbeforeunload = function(e) {
-    e = e || window.event;
-
-    $.get(URL+'sensor/camera/0/stopRGBStream?sessionID=' + localStorage.sessionID, function(data) {
-        console.log(data);
-    });
-    console.log('test');
-    
-    //--------openni停止----start-------
-    $.ajax({
-        url:URL+'openni/stop?sessionID='+localStorage.sessionID,
-        type:'GET'
-    }).done(function(data){
-        console.log(data);
-    }).fail(function(data){
-        console.log(data);
-    });
-
-    $.ajax({
-            url:URL+'vlocalizationRgbdslam/stop?sessionID='+localStorage.sessionID,
-            type:'GET'
-        })
-        .done(function(){
-            console.log('OK');
-        })
-        .fail(function(){
-            console.log('bad request');
-        });
-    //--------openni停止----end---------
-
-}
 
 function checkState() { //检查机器人状态
     if (bumperLeft) {
@@ -268,102 +238,183 @@ function stop() {           //停止机器人移动
         });
 }
 
+function startOpenni()
+{
+    $.ajax({
+        url:URL+'openni/start?sessionID='+localStorage.sessionID,
+        type:'GET'
+    }).done(function(data){
+        console.log('OK');
+    }).fail(function(data){
+        console.log('failed');
+    });
+}
+function stopOpenni()
+{
+    //--------openni停止----start------
+    $.ajax({
+        url:URL+'openni/stop?sessionID='+localStorage.sessionID,
+        type:'GET'
+    }).done(function(data){
+        console.log('OK');
+    }).fail(function(data){
+        console.log('failed');
+    });
+    //--------openni停止----end---------
+}
+function startGetPos()
+{
+    //------------开启 RGBD SLAM定位------start-----------
+        $.ajax({
+            url:URL+'vlocalizationRgbdslam/start?sessionID='+localStorage.sessionID,
+            type:'GET'
+        })
+        .done(function(){
+            console.log('OK');
+        })
+        .fail(function(){
+            console.log('bad request');
+        })
+        .always(function(){              
+           //------------获取定位--------start-------
+            setTimeout(function(){
+                $.ajax({
+                    url:URL+'vlocalizationRgbdslam/getLocation?sessionID='+localStorage.sessionID,
+                    type:'GET'
+                })
+                .done(function(data){
+                    $('#position p').html('x:'+data.coord.x+' y:'+data.coord.y+' z:'+data.coord.z);
+                })
+            },getPosTime);
+          //------------获取定位--------end-------
+        });
+        //-----------开启 RGBD SLAM定位---end----------
+}
+function stopGetPos()
+{
+    //----------定位关闭------start------ 
+     $.ajax({
+             url:URL+'vlocalizationRgbdslam/stop?sessionID='+localStorage.sessionID,
+             type:'GET'
+         })
+         .done(function(){
+             console.log('OK');
+         })
+         .fail(function(){
+             console.log('bad request');
+         });
+     //--------定位开始--------start--------
+}
+function startCamera()
+{
+    //调用sensor/camera/0/getRGBStreamWS接口，请求视频流，html中使用canvas来显示
+    $.ajax({
+            url: URL+'sensor/camera/0/getRGBStreamWS?sessionID=' + localStorage.sessionID + '&format=mp4&width=320&height=240&rate=300',
+            type: 'GET',
+            dataType: 'json',
+            data: "",
+        })
+        .done(function(data) {
+            WS = data.webSocketURL;
+            console.log(WS);
+            console.log("success");
+            var canvas = document.getElementById('videoCanvas'); //取得页面中的Canvas元素
+            var client = new WebSocket(WS); //使用请求获得的URL新建一个WebSocket
+           
+            var player = new jsmpeg(client, { //此处需要先调用jsmpg.js文件，按此方法调用jsmpeg()函数即可生成视频流
+                canvas: canvas,
+                autoplay: true
+            });
+        })
+        .fail(function() {
+            console.log("error");
+        })
+        .always(function() {
+            console.log("complete");
+        })
+    //get video input end
+}
+function stopCamera()
+{
+    //--------摄像头关闭-----start--------
+    $.get(URL+'sensor/camera/0/stopRGBStream?sessionID=' + localStorage.sessionID, function(data) {
+        console.log(data);
+    });
+    console.log('test');
+    //--------摄像头关闭-----start--------
+}
+
+window.onbeforeunload = function(e) {
+    e = e || window.event;
+   stopGetPos();
+   stopOpenni();
+   stopCamera();
+}
+
 $(document).ready(function() {
     keepGetting();
     getBatteryState();
     //get video input start
     var WS;
     var flag = false;
+    var Bflag={openni:false,normalVideo:false};  //判断顶部openni接口和视频接口
 
-    
-    $('#getPos').bind('click',function(){
-        if($(this).html()=='start')
+//---------------------------普通视频 开启------start-------------------------------------
+   $('#videoNormal').bind('click',function(){
+    $('.detailAPI').hide();
+    stopOpenni();
+    stopCamera();
+    stopGetPos();
+    startCamera();
+    $('#video').prop('checked',false);
+    $('#getPos').prop('checked',false);
+   });
+   
+//----------------------------------普通视频 开启------end------------------------------------------------
+  
+
+
+//----------openni启动start-------------------------------------------------------------------
+    $('#openni').bind('click',function(){
+        $('.detailAPI').show();
+        stopCamera();
+        startOpenni();
+        $('.detailAPI').bind('mouseleave',function(){
+            $(this).hide();
+        })
+    });
+
+//---------------openni 启动 end--------------------------------------------------------------
+        
+//-----------------------openni 视频 启动---start---------------------------------------
+    $('#video').bind('click',function(){
+        if($(this).prop('checked'))
         {
-            //------------开启 RGBD SLAM定位------start-----------
-            $(this).html('stop');
-            $.ajax({
-                url:URL+'vlocalizationRgbdslam/start?sessionID='+localStorage.sessionID,
-                type:'GET'
-            })
-            .done(function(){
-                console.log('OK');
-               //------------获取定位--------start-------
-                $.ajax({
-                    url:URL+'vlocalizationRgbdslam/getLocation?sessionID='+localStorage.sessionID,
-                    type:'GET'
-                })
-                .done(function(){
-                    console.log('OK');
-                })
-                .always(function(data){
-                    $('#location').html('x:'+data.coord.x+' y:'+data.coord.y+' z:'+data.coord.z);
-                });
-                //------------获取定位--------end-------
-            })
-            .fail(function(){
-                console.log('bad request');
-            });
-            //-----------开启 RGBD SLAM定位---end----------
+            startCamera();
         }
         else
         {
-            //----------停止 RGBD SLAM定位----start----------          
-            $(this).html('start');
-            $.ajax({
-                url:URL+'vlocalizationRgbdslam/stop?sessionID='+localStorage.sessionID,
-                type:'GET'
-            })
-            .done(function(){
-                console.log('OK');
-            })
-            .fail(function(){
-                console.log('bad request');
-            });
-            //----------停止 RGBD SLAM定位----end----------   
+            stopCamera();
         }
     });
-   
 
 
-    //----------openni启动start------------
-    $.ajax({
-        url:URL+'openni/start?sessionID='+localStorage.sessionID,
-        type:'GET'
-    }).done(
-        
-        //调用sensor/camera/0/getRGBStreamWS接口，请求视频流，html中使用canvas来显示
-        $.ajax({
-                url: URL+'sensor/camera/0/getRGBStreamWS?sessionID=' + localStorage.sessionID + '&format=mp4&width=320&height=240&rate=300',
-                type: 'GET',
-                dataType: 'json',
-                data: "",
-            })
-            .done(function(data) {
-                WS = data.webSocketURL;
-                console.log(WS);
-                console.log("success");
-                var canvas = document.getElementById('videoCanvas'); //取得页面中的Canvas元素
-                var client = new WebSocket(WS); //使用请求获得的URL新建一个WebSocket
-               
-                var player = new jsmpeg(client, { //此处需要先调用jsmpg.js文件，按此方法调用jsmpeg()函数即可生成视频流
-                    canvas: canvas,
-                    autoplay: true
-                });
-            })
-            .fail(function() {
-                console.log("error");
-            })
-            .always(function() {
-                console.log("complete");
-            })
-        //get video input end
+//-----------------------openni 视频 启动---end-----------------------------------------
 
-    )
-    .fail(function(){
-        console.log('fail');
-    });
-    //---------------openni 启动 end----------------
-        
+//-----------------------openni 定位 启动---start---------------------------------------
+ 
+$('#getPos').bind('click',function(){
+    if($(this).porp('checke'))
+    {
+        getPos();
+    }
+    else
+    {
+        stopGetPos();
+    }
+});
+
+//-----------------------openni 定位 启动---end-----------------------------------------
 
     //控制事件开始
 

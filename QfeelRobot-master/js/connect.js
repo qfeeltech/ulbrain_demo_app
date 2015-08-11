@@ -1,7 +1,7 @@
 var sessionStorage = window.sessionStorage;
 var localStorage = window.localStorage;
 
-var URL = 'http://192.168.199.122:9000/';   //路由地址
+var URL = '/';   //路由地址
 
 
 

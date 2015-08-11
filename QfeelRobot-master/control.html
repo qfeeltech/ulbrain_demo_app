@@ -16,15 +16,18 @@
 <canvas id="videoCanvas">
 </canvas>
 
-
-
-	<div id="getPos">start</div>
-	<div id="location">
-		
+<div id="APIButtons">
+	<input type="radio" name="module" value="openni" id="openni" /><label for="openni">openni</label>
+	<input type="radio" name="module" value="videoNormal" id="videoNormal"><label for="videoNormal">普通视频</label>
+	<div class="detailAPI">
+		<input type="checkbox" name="detail" value="video" id="video"><label for="video">视频</label>
+		<input type="checkbox" name="detail" value="getPos" id="getPos"><label for="getPos">获取位置</label>
 	</div>
+</div>
 
-
-
+<div id="position">
+	<p></p>
+</div>
 
 <div id="battery">
 	<p id="battery-state">100%</p>

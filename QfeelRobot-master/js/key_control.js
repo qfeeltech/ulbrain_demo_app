@@ -11,7 +11,7 @@ var up_right = false;
 var down_left = false;
 var down_right = false;
 
-var URL = 'http://192.168.199.122:9000/';
+var URL = '/';
 
 function linearForward() {
     if (up && single) {

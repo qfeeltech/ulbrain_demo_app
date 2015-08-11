@@ -1,6 +1,6 @@
 var sessionStorage = window.sessionStorage; //存储selfID
 var localStorage = window.localStorage; //本地存储
-var URL = 'http://192.168.199.122:9000/'; //路由地址
+var URL = '/'; //路由地址
 $(document).ready(function() {
     $("#pair-submit").on('click', function() { //点击配对发起配对请求
         var selfID = localStorage.selfID;
