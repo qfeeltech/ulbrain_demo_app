@@ -8,8 +8,11 @@ body {
 }
 li {list-style: none;}
 #APIButtons {position: fixed;z-index: 10000;width: 320px;}
-#APIButtons label {color: #fff;}
-.detailAPI {display: none;width: 120px;height: 30px;border: 1px solid #fff;}
+#APIButtons a {width: 90px;height: 30px;color: #fff;display: block;float: left;background: blue;text-align: center;margin-left: 10px;line-height: 30px;}
+.detailAPI {display: none;width: 120px;height: 30px;border: 1px solid #fff;position: fixed;left: 0px;top: 35px;color: #fff;}
+
+#position {display: none;height: 30px;position: fixed;width: 260px;left: 220px;border: 1px solid #fff;}
+#position p{height: 100%;line-height: 30px;}
 
 #videoCanvas {
     position: fixed;

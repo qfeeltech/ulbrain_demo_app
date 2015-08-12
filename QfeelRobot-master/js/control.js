@@ -14,7 +14,7 @@ var downLeft = false;
 var downRight = false;
 
 var moveTimeout=100;
-var getPosTime=200;//每次获取位置信息的时间
+var getPosTime=1000;//每次获取位置信息的时间
 var power; //电池电量
 var powerNum;
 var warning = false; //是否处于警告状态
@@ -262,34 +262,11 @@ function stopOpenni()
     });
     //--------openni停止----end---------
 }
-function startGetPos()
-{
-    //------------开启 RGBD SLAM定位------start-----------
-        $.ajax({
-            url:URL+'vlocalizationRgbdslam/start?sessionID='+localStorage.sessionID,
-            type:'GET'
-        })
-        .done(function(){
-            console.log('OK');
-        })
-        .fail(function(){
-            console.log('bad request');
-        })
-        .always(function(){              
-           //------------获取定位--------start-------
-            setTimeout(function(){
-                $.ajax({
-                    url:URL+'vlocalizationRgbdslam/getLocation?sessionID='+localStorage.sessionID,
-                    type:'GET'
-                })
-                .done(function(data){
-                    $('#position p').html('x:'+data.coord.x+' y:'+data.coord.y+' z:'+data.coord.z);
-                })
-            },getPosTime);
-          //------------获取定位--------end-------
-        });
-        //-----------开启 RGBD SLAM定位---end----------
-}
+
+
+
+
+
 function stopGetPos()
 {
     //----------定位关闭------start------ 
@@ -299,41 +276,14 @@ function stopGetPos()
          })
          .done(function(){
              console.log('OK');
+
          })
          .fail(function(){
              console.log('bad request');
          });
      //--------定位开始--------start--------
 }
-function startCamera()
-{
-    //调用sensor/camera/0/getRGBStreamWS接口，请求视频流，html中使用canvas来显示
-    $.ajax({
-            url: URL+'sensor/camera/0/getRGBStreamWS?sessionID=' + localStorage.sessionID + '&format=mp4&width=320&height=240&rate=300',
-            type: 'GET',
-            dataType: 'json',
-            data: "",
-        })
-        .done(function(data) {
-            WS = data.webSocketURL;
-            console.log(WS);
-            console.log("success");
-            var canvas = document.getElementById('videoCanvas'); //取得页面中的Canvas元素
-            var client = new WebSocket(WS); //使用请求获得的URL新建一个WebSocket
-           
-            var player = new jsmpeg(client, { //此处需要先调用jsmpg.js文件，按此方法调用jsmpeg()函数即可生成视频流
-                canvas: canvas,
-                autoplay: true
-            });
-        })
-        .fail(function() {
-            console.log("error");
-        })
-        .always(function() {
-            console.log("complete");
-        })
-    //get video input end
-}
+
 function stopCamera()
 {
     //--------摄像头关闭-----start--------
@@ -357,17 +307,118 @@ $(document).ready(function() {
     //get video input start
     var WS;
     var flag = false;
-    var Bflag={openni:false,normalVideo:false};  //判断顶部openni接口和视频接口
+    var countOpenni=0;
+    var countVideo=0;
+    var timer=null;  //每次获取位置的定时器名称
+    function startCamera()
+    {
+        //调用sensor/camera/0/getRGBStreamWS接口，请求视频流，html中使用canvas来显示
+        $.ajax({
+                url: URL+'sensor/camera/0/getRGBStreamWS?sessionID=' + localStorage.sessionID + '&format=mp4&width=320&height=240&rate=300',
+                type: 'GET',
+                dataType: 'json',
+                data: "",
+            })
+            .done(function(data) {
+                WS = data.webSocketURL;
+                console.log(WS);
+                console.log("success");
+                var canvas = document.getElementById('videoCanvas'); //取得页面中的Canvas元素
+                var client = new WebSocket(WS); //使用请求获得的URL新建一个WebSocket
+               
+                var player = new jsmpeg(client, { //此处需要先调用jsmpg.js文件，按此方法调用jsmpeg()函数即可生成视频流
+                    canvas: canvas,
+                    autoplay: true
+                });
+            })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            })
+        //get video input end
+    }
+
+    function getPos()
+    {
+         //------------获取定位--------start-------
+         timer=setTimeout(function(){
+              $.ajax({
+                  url:URL+'vlocalizationRgbdslam/getLocation?sessionID='+localStorage.sessionID,
+                  type:'GET'
+              })
+              .done(function(data){
+                  $('#position p').html('x:'+data.coord.x+' y:'+data.coord.y+' z:'+data.coord.z);
+                   getPos();
+              })
+          },getPosTime);
+        //------------获取定位--------end-------
+    }
+
+    function startGetPos()
+    {
+        //------------开启 RGBD SLAM定位------start-----------
+            $.ajax({
+                url:URL+'vlocalizationRgbdslam/start?sessionID='+localStorage.sessionID,
+                type:'GET'
+            })
+            .done(function(){
+                $.ajax({
+                    url:URL+'vlocalizationRgbdslam/getLocation?sessionID='+localStorage.sessionID,
+                    type:'GET'
+                })
+                .done(function(data){
+                    $('#position p').html('x:'+data.coord.x+' y:'+data.coord.y+' z:'+data.coord.z);
+                })
+                .fail(function(){
+                    console.log('bad request');
+                });
+                getPos();
+            })
+            .fail(function(){
+                console.log('bad request');
+            });
+
+            //-----------开启 RGBD SLAM定位---end----------
+    }
 
 //---------------------------普通视频 开启------start-------------------------------------
    $('#videoNormal').bind('click',function(){
-    $('.detailAPI').hide();
-    stopOpenni();
-    stopCamera();
-    stopGetPos();
-    startCamera();
-    $('#video').prop('checked',false);
-    $('#getPos').prop('checked',false);
+    $(this).addClass('disabled');
+      setTimeout(function(){
+        $('#videoNormal').removeClass('disabled');
+      },500);
+      countVideo++;
+      if(countVideo%2)
+      {
+          $(this).html('关闭普通视频');
+          $('.detailAPI').hide();
+          if(countOpenni%2)
+            {
+              stopOpenni();
+              if($('#video').prop('checked'))
+              {
+                stopCamera();
+              }
+              if($('#getPos').prop('checked'))
+              {
+                stopGetPos();
+              }
+              $('#openni').html('开启openni');
+              countOpenni++;
+            }
+          setTimeout(startCamera,500);
+          $('#video').prop('checked',false);
+          $('#getPos').prop('checked',false);
+          $('#position').hide();
+      }   
+      else
+      {
+         stopCamera();
+         $(this).html('开启普通视频');
+      }
+
    });
    
 //----------------------------------普通视频 开启------end------------------------------------------------
@@ -376,25 +427,64 @@ $(document).ready(function() {
 
 //----------openni启动start-------------------------------------------------------------------
     $('#openni').bind('click',function(){
-        $('.detailAPI').show();
-        stopCamera();
-        startOpenni();
-        $('.detailAPI').bind('mouseleave',function(){
-            $(this).hide();
-        })
+        $(this).addClass('disabled');
+        setTimeout(function(){
+          $('#openni').removeClass('disabled');
+        },500);
+        countOpenni++;
+        if(countOpenni%2)
+        {
+            $('#openni').html('关闭openni');
+            if(countVideo%2)
+            {
+                stopCamera();
+                $('#videoNormal').html('开启普通视频');
+                countVideo++;
+            }
+           
+            $('.detailAPI').show();
+            setTimeout(startOpenni,500);
+        }
+        else
+        {
+            $(this).html('开启openni');
+            stopOpenni();
+            if($('#video').prop('checked'))
+            {
+              stopCamera();
+            }
+            if($('#getPos').prop('checked'))
+            {
+              stopGetPos();
+            }
+            $('.detailAPI').hide();
+            $('#video').prop('checked',false);
+            $('#getPos').prop('checked',false);
+        }
     });
 
 //---------------openni 启动 end--------------------------------------------------------------
         
+
 //-----------------------openni 视频 启动---start---------------------------------------
     $('#video').bind('click',function(){
         if($(this).prop('checked'))
         {
+            $(this).prop('disabled','disabled');
+            setTimeout(function(){
+                $('#video').prop('disabled','');
+            },500);
             startCamera();
+       
         }
         else
         {
+            $(this).prop('disabled','disabled');
+            setTimeout(function(){
+                $('#video').prop('disabled','');
+            },500);
             stopCamera();
+
         }
     });
 
@@ -404,13 +494,24 @@ $(document).ready(function() {
 //-----------------------openni 定位 启动---start---------------------------------------
  
 $('#getPos').bind('click',function(){
-    if($(this).porp('checke'))
+    if($(this).prop('checked'))
     {
-        getPos();
+        $(this).prop('disabled','disabled');
+        setTimeout(function(){
+            $('#getPos').prop('disabled','');
+        },500);
+        $('#position').show();
+        startGetPos();
     }
     else
-    {
+    {   
+        $(this).prop('disabled','disabled');
+        setTimeout(function(){
+            $('#getPos').prop('disabled','');
+        },500);
         stopGetPos();
+        clearTimeout(timer);
+        $('#position').hide();
     }
 });
 
@@ -562,8 +663,6 @@ $('#getPos').bind('click',function(){
     $("#up,#down,#left,#right").bind('mousedown', function(event) {
         event.preventDefault();
     });
-
-    
 
     $(document).bind('mouseup', function(event) {
         $("#up").attr('src', './images/up.png');
