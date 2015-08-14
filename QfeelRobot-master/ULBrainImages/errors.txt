@@ -1,0 +1,2 @@
+[Wed Aug 12 2015 15:59:29 GMT+0800 (CST)] Layer "+.png": Expected Either a default asset specification or a layer asset specification but "+" found.
+[Wed Aug 12 2015 15:59:29 GMT+0800 (CST)] Layer "+click.png": Expected Either a default asset specification or a layer asset specification but "+" found.

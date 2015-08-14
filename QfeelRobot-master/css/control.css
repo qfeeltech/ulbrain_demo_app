@@ -2,18 +2,32 @@
     font-family: 'fangzheng-hei';
     src: url('../fonts/fangzheng-xihei.ttf');
 }*/
-
+*{padding:0;margin: 0;}
 body {
-    background: black;
+    background: #000;font-size: 10px;
 }
 li {list-style: none;}
-#APIButtons {position: fixed;z-index: 10000;width: 320px;}
-#APIButtons a {width: 90px;height: 30px;color: #fff;display: block;float: left;background: blue;text-align: center;margin-left: 10px;line-height: 30px;}
-.detailAPI {display: none;width: 120px;height: 30px;border: 1px solid #fff;position: fixed;left: 0px;top: 35px;color: #fff;}
+#APIButtons {position: fixed;z-index: 10000;width: 320px;left: 15px;top: 15px;}
+#APIButtons p {margin-bottom: 0px;}
+#APIButtons>.button {float: left;text-align: center;color: #fff;position: relative;}
+#APIButtons .btn {position: absolute;width: 40px;height: 35px;z-index: 10;opacity: 0;}
+#APIButtons .btn1 {left: 10px;top:15px;}
+#APIButtons .btn2 {left: -2px;top: 15px;}
+#APIButtons>.button1 {margin-right: 30px;}
+#APIButtons>.button>img {text-align: center;}
 
-#position {display: none;height: 30px;position: fixed;width: 260px;left: 220px;border: 1px solid #fff;}
-#position p{height: 100%;line-height: 30px;}
+#APIButtons .detailAPI {display: none;width: 230px;height: 56px;position: fixed;left:200px;top: 15px;color: #fff;}
+#APIButtons .detailAPI .button {position: relative;float: left;margin-right: 10px;}
+#APIButtons .detailAPI input,#APIButtons .detailAPI a {width: 65px;margin-left: 30px;height: 30px;position: absolute;left: 0;top: 16px;opacity: 1;}
+#APIButtons .detailAPI img {float: left;margin-top: 8px;}
+#APIButtons .detailAPI .switch {margin-left: 8px;}
 
+
+
+
+#position {display: none;height: 30px;position: fixed;width: 370px;left: 50%;margin-left: -185px;bottom: 15px;background: rgba(19,20,19,0.2);}
+#position .pos {width: 120px;height: 26px;line-height: 26px;text-align: center;display: inline-block;margin: 2px 0;color: #fff;border-right: 2px solid #ccc;}
+#position .z {border: none;}
 #videoCanvas {
     position: fixed;
     background-size: cover;
@@ -24,10 +38,11 @@ li {list-style: none;}
 #directions {
     position: absolute;
     bottom: 30px;
-    left: 20px;
-    height: 346px;
-    width: 140px;
-    background: transparent;
+    left: 15px;
+    height: 126.5px;
+    width: 122.5px;
+    background: url(../ULBrainImages/bg1.png) no-repeat;
+    background-size: 122.5px 126px;
 }
 
 #speeds {
@@ -47,33 +62,47 @@ li {list-style: none;}
 }
 
 #attention {
-    margin-top: 62px;
     display: none;
-    padding-top: 45px;
-    padding-left: 20px;
     position: absolute;
-    margin-left: 10px;
-    width: 120px;
-    height: 220px;
-    background: url('../images/attentionUp.png') no-repeat;
-    background-size: 120px;
+    width: 124px;
+    height: 122px;
+    top: -84px;
+    left: 1px;
+    background: url(../ULBrainImages/bg2.png) no-repeat;
+    background-size: 122px 119px;
+    z-index: -1;
 }
+#attention h4 {text-align: center;font-size: 14px;color: #fff;font-weight: normal;margin-top: 5px;margin-bottom: 10px;}
+#attention div {width: 62px;float: left;font-size: 1rem;}
 
+#attention img {
+    margin-left: 0px;
+}
 #attention span {
     font-family: 'fangzheng-hei';
     color: white;
+    padding-left: 0px;
+    white-space: nowrap;
 }
 
 #attentionRight{
     display: none;
     position: absolute;
-    margin-top: 258px;
-    margin-left: 91px;
-    width: 200px;
-    height: 65px;
-    background: url('../images/attentionRight.png') no-repeat;
+    left: 122px;
+    top: 32px;
+    width: 90px;
+    padding-top: 20px;
+    height: 63px;
+    background: rgba(0,0,0,0.2);
     background-size: auto 65px;
+    color: #fff;
+    font-weight: normal;
+    font-size: 1rem;
 }
+#attentionRight div{
+    margin-left: 10px;
+}
+
 #battery {
     position: absolute;
     top: 10px;

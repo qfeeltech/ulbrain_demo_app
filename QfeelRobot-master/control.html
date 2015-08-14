@@ -17,16 +17,40 @@
 </canvas>
 
 <div id="APIButtons">
-	<button class="btn btn-info" id="openni">开启openni</button>
-	<button class="btn btn-info" id="videoNormal">开启普通视频</button>
-	<div class="detailAPI">
-		<input type="checkbox" name="detail" value="video" id="video"><label for="video">视频</label>
-		<input type="checkbox" name="detail" value="getPos" id="getPos"><label for="getPos">获取位置</label>
+	<div class="button button1">
+		<p>视频（普通）</p>
+		<img src="ULBrainImages/videoclick.png"  height="35" width="35" alt="" class="videoNormal">
+		<button id="videoNormal" class="btn btn1"></button>
 	</div>
+	<div class="button button2">
+		<p>Openni</p>
+		<img src="ULBrainImages/openNIclickclick.png" height="35" width="35" alt="" class="openni">
+		<button id="openni" class="btn btn2"></button>
+	</div>
+
+	<div class="detailAPI">
+		<div class="button button1">
+			<p>视频（Openni）</p>
+			<a id="video" href="javascript:;"></a>
+			<img src="ULBrainImages/video.png" height="22" width="22" alt="">
+			<img src="ULBrainImages/off.png" height="23" width="65" alt="" class="switch switch1">
+
+		</div>
+		<div class="button button2">
+			<p>坐标定位</p>
+			<a href="javascript:;" id="getPos"></a>
+			<img src="ULBrainImages/position.png" height="22" width="22" alt="">
+			<img src="ULBrainImages/off.png" height="23" width="65" alt="" class="switch switch2">
+		</div>
+	</div>
+
+
 </div>
 
 <div id="position">
-	<p></p>
+<span class="pos x">x:123</span>
+<span class="pos y">y:123</span>
+<span class="pos z">z:123</span>
 </div>
 
 <div id="battery">
@@ -35,54 +59,51 @@
 </div>
 <div id="directions">
 	<div id="attention">
-		<!-- 是否碰撞  start -->
+		<h4>注意</h4>
+		<div>
+			<img id="cliffLeft" src="./images/normal.png" width="10px;">
+			<span>左侧悬空</span>
+		</div>
 		<div>
 			<img id="bumperLeft" src="./images/normal.png" width="10px;">
-			<img src="./images/hitLeft.png" width="50px" style="margin-left: 10px;">
+			<span>左侧碰撞</span>
+		</div>
+		<div>
+			<img id="cliffRight" src="./images/normal.png" width="10px;">
+			<span>右侧悬空</span>
 		</div>
 		<div>
 			<img id="bumperRight" src="./images/normal.png" width="10px;">
-			<img src="./images/hitRight.png" width="50px;" style="margin-left: 10px;">
+			<span>右侧碰撞</span>
+		</div>
+		<div>
+			<img id="cliffCenter" src="./images/normal.png" width="10px;">
+			<span>中间悬空</span>
 		</div>
 		<div>
 			<img id="bumperCenter" src="./images/normal.png" width="10px;">
-			<img src="./images/hitCenter.png" width="50px;" style="margin-left: 10px;">
+			<span>中间碰撞</span>		
 		</div>
-		<!-- 是否碰撞  end -->
+	</div>
+	<div id="attentionRight">
+
 		<!-- 是否被提起  start -->
-		<div style="margin-top: 8px;">
+		<div>
 			<img id="wheelDropLeft" src="./images/normal.png" width="10px;">
-			<img src="./images/wheelDropLeft.png" width="60px;" style="margin-left: 10px;">
+			<span>左轮被提起</span>
 		</div>
 		<div>
 			<img id="wheelDropRight" src="./images/normal.png" width="10px;">
-			<img src="./images/wheelDropRight.png" width="60px;" style="margin-left: 10px;">
+			<span>右轮被提起</span>
 		</div>
 		<!-- 是否被提起  end -->
-	
 	</div>
 
-	<div id="attentionRight">
-			<!-- 是否悬空  start -->
-		<div style="margin-top: 2px;margin-left: 55px;">
-			<img id="cliffLeft" src="./images/normal.png" width="10px;">
-			<img src="./images/cliffLeft.png" width="50px;" style="margin-left: 10px;">
-		</div>
-		<div style="margin-left: 55px;">
-			<img id="cliffRight" src="./images/normal.png" width="10px;">
-			<img src="./images/cliffRight.png" width="50px;" style="margin-left: 10px;">
-		</div>
-		<div style="margin-left: 55px;">
-			<img id="cliffCenter" src="./images/normal.png" width="10px;">
-			<img src="./images/cliffCenter.png" width="50px;" style="margin-left: 10px;">
-		</div>
-		<!-- 是否悬空  end -->
-	</div>
-	<img id="up" src="./images/up.png" width="120px" style="margin-top:223px;margin-left:10px;z-index: -1">
-	<img id="left" src="./images/left.png" width="40px" height="66px;" style="margin-top: -22px;margin-left: 10px;z-index: 0;">
-	<img id="center" src="./images/center_blue.png" width="43px;" style="margin-top: -22px; margin-left: -5px;z-index: 1">
-	<img id="right" src="./images/right.png" width="39px" height="65px;" style="margin-top: -22px;margin-left: -5px;z-index: 0">
-	<img id="down" src="./images/down.png" width="120px" style="margin-left: 10px;margin-top: -22px;z-index: -1">
+	<img id="up" src="ULBrainImages/t.png" height="27" width="63px" style="margin-top:10px;margin-left:30px;z-index: 2">
+	<img id="left" src="ULBrainImages/l.png" width="21px" height="55px;" style="margin-top: -2px;margin-left: 7px;z-index: 0;">
+	<img id="center" src="ULBrainImages/c.png" height="45px" width="44px;" style="margin-top: -1px; margin-left: 8px;z-index: 1">
+	<img id="right" src="ULBrainImages/r.png" width="21px" height="55px;" style="margin-top: -2px;margin-left: 7px;z-index: 0">
+	<img id="down" src="ULBrainImages/d.png" height="29" width="63px" style="margin-left: 30px;margin-top: -3px;z-index: -1">
 </div>
 <div id="speeds">
 	<img id="speedup" src="./images/add.png" width="43px" style="margin-left:50px">

@@ -267,7 +267,7 @@ function stopOpenni()
 
 
 
-function stopGetPos()
+/*function stopGetPos()
 {
     //----------定位关闭------start------ 
      $.ajax({
@@ -282,7 +282,7 @@ function stopGetPos()
              console.log('bad request');
          });
      //--------定位开始--------start--------
-}
+}*/
 
 function stopCamera()
 {
@@ -290,18 +290,22 @@ function stopCamera()
     $.get(URL+'sensor/camera/0/stopRGBStream?sessionID=' + localStorage.sessionID, function(data) {
         console.log(data);
     });
+    var canvas=document.getElementById('videoCanvas');
+    var context=canvas.getContext('2d');
+    context.clearRect(0,0,canvas.width,canvas.height);
     console.log('test');
     //--------摄像头关闭-----start--------
 }
 
 window.onbeforeunload = function(e) {
-    e = e || window.event;
-   stopGetPos();
-   stopOpenni();
-   stopCamera();
-}
+ e = e || window.event;
+ stopCamera();
+ stopOpenni();
+ };
 
 $(document).ready(function() {
+
+
     keepGetting();
     getBatteryState();
     //get video input start
@@ -314,7 +318,7 @@ $(document).ready(function() {
     {
         //调用sensor/camera/0/getRGBStreamWS接口，请求视频流，html中使用canvas来显示
         $.ajax({
-                url: URL+'sensor/camera/0/getRGBStreamWS?sessionID=' + localStorage.sessionID + '&format=mp4&width=320&height=240&rate=300',
+                url: URL+'sensor/camera/0/getRGBStreamWS?sessionID=' + localStorage.sessionID + '&format=mp4&width=320&height=480&rate=240',
                 type: 'GET',
                 dataType: 'json',
                 data: "",
@@ -345,18 +349,20 @@ $(document).ready(function() {
          //------------获取定位--------start-------
          timer=setTimeout(function(){
               $.ajax({
-                  url:URL+'vlocalizationRgbdslam/getLocation?sessionID='+localStorage.sessionID,
+                  url:URL+'rlocalization/getLocation?sessionID='+localStorage.sessionID,
                   type:'GET'
               })
               .done(function(data){
-                  $('#position p').html('x:'+data.coord.x+' y:'+data.coord.y+' z:'+data.coord.z);
-                   getPos();
+                  $('#position .x').html('x:'+data.coord.x);
+                  $('#position .y').html('y:'+data.coord.y);
+                  $('#position .z').html('z:'+data.coord.z);
+              getPos();
               })
           },getPosTime);
         //------------获取定位--------end-------
     }
 
-    function startGetPos()
+   /* function startGetPos()
     {
         //------------开启 RGBD SLAM定位------start-----------
             $.ajax({
@@ -381,85 +387,124 @@ $(document).ready(function() {
             });
 
             //-----------开启 RGBD SLAM定位---end----------
-    }
+    }*/
 
 //---------------------------普通视频 开启------start-------------------------------------
    $('#videoNormal').bind('click',function(){
-    $(this).addClass('disabled');
-      setTimeout(function(){
-        $('#videoNormal').removeClass('disabled');
-      },500);
+    
+      countVideo++;
+      if(countVideo%2)
+      {
+          /*$(this).html('关闭普通视频');*/
+          $('.detailAPI').hide();
+          $('.openni').attr('src','ULBrainImages/openNIun.png');
+          $('#openni').addClass('disabled');
+          /*if(countOpenni%2)
+            {
+              if($('#video').prop('checked'))
+              {
+                stopCamera();
+                $('.switch1').attr('src','ULBrainImages/off.png');
+              }
+              if($('#getPos').prop('checked'))
+              {
+                stopGetPos();
+                $('.switch2').attr('src','ULBrainImages/off.png');
+              }
+              stopOpenni();
+              $('.openni').attr('src','ULBrainImages/openNIun.png');
+              $('#openni').html('开启openni');
+              countOpenni++;
+            }*/
+        $('.videoNormal').attr('src','ULBrainImages/video1.png')
+          setTimeout(startCamera,500);
+          /*$('#video').prop('checked',false);
+          $('#getPos').prop('checked',false);
+          $('#position').hide();*/
+      }   
+      else
+      {
+         stopCamera();
+         /*$(this).html('开启普通视频');*/
+         $('.videoNormal').attr('src','ULBrainImages/videoclick.png')
+         $('.openni').attr('src','ULBrainImages/openNI.png');
+        $('#openni').removeClass('disabled');
+      }
+      return false;
+   });
+    //touch事件
+   $('#videoNormal').bind('touchstart',function(e){
+        e.preventDefault();
+    
       countVideo++;
       if(countVideo%2)
       {
           $(this).html('关闭普通视频');
           $('.detailAPI').hide();
-          if(countOpenni%2)
-            {
-              stopOpenni();
-              if($('#video').prop('checked'))
-              {
-                stopCamera();
-              }
-              if($('#getPos').prop('checked'))
-              {
-                stopGetPos();
-              }
-              $('#openni').html('开启openni');
-              countOpenni++;
-            }
+          $('.openni').attr('src','ULBrainImages/openNIun.png');
+          $('#openni').addClass('disabled');
+        $('.videoNormal').attr('src','ULBrainImages/video1.png')
           setTimeout(startCamera,500);
-          $('#video').prop('checked',false);
-          $('#getPos').prop('checked',false);
-          $('#position').hide();
       }   
       else
       {
          stopCamera();
          $(this).html('开启普通视频');
+         $('.videoNormal').attr('src','ULBrainImages/videoclick.png')
+         $('.openni').attr('src','ULBrainImages/openNI.png');
+        $('#openni').removeClass('disabled');
       }
 
    });
-   
 //----------------------------------普通视频 开启------end------------------------------------------------
   
 
 
 //----------openni启动start-------------------------------------------------------------------
     $('#openni').bind('click',function(){
-        $(this).addClass('disabled');
-        setTimeout(function(){
-          $('#openni').removeClass('disabled');
-        },500);
+        
         countOpenni++;
         if(countOpenni%2)
         {
-            $('#openni').html('关闭openni');
-            if(countVideo%2)
+            $(this).html('关闭openni');
+            /*if(countVideo%2)
             {
                 stopCamera();
                 $('#videoNormal').html('开启普通视频');
+                $('.videoNormal').attr('src','ULBrainImages/video1click.png')
                 countVideo++;
-            }
-           
+            }*/
+            $('.videoNormal').attr('src','ULBrainImages/video1un.png');
+            $('#videoNormal').addClass('disabled');
             $('.detailAPI').show();
             setTimeout(startOpenni,500);
+            $('.openni').attr('src','ULBrainImages/openNI.png');
         }
         else
         {
+            $('.openni').attr('src','ULBrainImages/openNIclickclick.png');
             $(this).html('开启openni');
-            stopOpenni();
-            if($('#video').prop('checked'))
+            if($('#video').prop('data-state')==true)
             {
               stopCamera();
+    
+              $('.switch1').attr('src','ULBrainImages/off.png');
             }
-            if($('#getPos').prop('checked'))
+            
+            if($('#getPos').prop('data-state')==true)
             {
-              stopGetPos();
+
+             
+              $('.switch2').attr('src','ULBrainImages/off.png');
+              $('#position').hide();
+              clearTimeout(timer);
             }
+            stopOpenni();
             $('.detailAPI').hide();
-            $('#video').prop('checked',false);
-            $('#getPos').prop('checked',false);
+            $('#video').prop('data-state',false);
+            $('#getPos').prop('data-state',false);
+            $('#videoNormal').removeClass('disabled');
+            $('.videoNormal').attr('src','ULBrainImages/videoclick.png');
         }
     });
 
@@ -468,52 +513,76 @@ $(document).ready(function() {
 
 //-----------------------openni 视频 启动---start---------------------------------------
     $('#video').bind('click',function(){
-        if($(this).prop('checked'))
-        {
-            $(this).prop('disabled','disabled');
-            setTimeout(function(){
-                $('#video').prop('disabled','');
-            },500);
+        if(!$(this).prop('data-state'))
+        {   
+            $(this).prop('data-state',true);
             startCamera();
-       
+            $('.switch1').attr('src','ULBrainImages/on.png');
         }
         else
         {
-            $(this).prop('disabled','disabled');
-            setTimeout(function(){
-                $('#video').prop('disabled','');
-            },500);
             stopCamera();
-
+            $(this).prop('data-state',false);
+            $('.switch1').attr('src','ULBrainImages/off.png');
         }
     });
-
+    //touch事件
+    $('#video').bind('touchstart',function(event){
+        event.preventDefault();
+        if(!$(this).prop('data-state'))
+        {   
+            $(this).prop('data-state',true);
+            startCamera();
+            $('.switch1').attr('src','ULBrainImages/on.png');
+        }
+        else
+        {
+            stopCamera();
+            $(this).prop('data-state',false);
+            $('.switch1').attr('src','ULBrainImages/off.png');
+        }
+    });
 
 //-----------------------openni 视频 启动---end-----------------------------------------
 
 //-----------------------openni 定位 启动---start---------------------------------------
  
-$('#getPos').bind('click',function(){
-    if($(this).prop('checked'))
+$('#getPos').bind('click',function(event){
+
+    if(!$(this).prop('data-state'))
     {
-        $(this).prop('disabled','disabled');
-        setTimeout(function(){
-            $('#getPos').prop('disabled','');
-        },500);
+        $(this).prop('data-state',true);
         $('#position').show();
-        startGetPos();
+        getPos();
+        $('.switch2').attr('src','ULBrainImages/on.png');
     }
     else
     {   
-        $(this).prop('disabled','disabled');
-        setTimeout(function(){
-            $('#getPos').prop('disabled','');
-        },500);
-        stopGetPos();
         clearTimeout(timer);
         $('#position').hide();
+        $('.switch2').attr('src','ULBrainImages/off.png');
+        $(this).prop('data-state',false);
     }
 });
+
+$('#getPos').bind('touchstart',function(event){
+    event.preventDefault();
+    if(!$(this).prop('data-state'))
+    {
+        $(this).prop('data-state',true);
+        $('#position').show();
+        getPos();
+        $('.switch2').attr('src','ULBrainImages/on.png');
+    }
+    else
+    {   
+        clearTimeout(timer);
+        $('#position').hide();
+        $('.switch2').attr('src','ULBrainImages/off.png');
+        $(this).prop('data-state',false);
+    }
+});
+
 
 //-----------------------openni 定位 启动---end-----------------------------------------
 
@@ -525,14 +594,14 @@ $('#getPos').bind('click',function(){
     });
 
     $("#up").on('touchstart', function(event) {
-        $(this).attr('src', './images/up2.png');
+        $(this).attr('src', 'ULBrainImages/tclick.png');
         event.preventDefault();
         event.stopPropagation(); // 阻止事件冒泡
         currLinearSpeed = linearSpeed;
         setSending(true)
     });
     $("#down").on('touchstart', function(event) {
-        $(this).attr('src', './images/down2.png');
+        $(this).attr('src', 'ULBrainImages/dclick.png');
         event.preventDefault();
         event.stopPropagation(); // 阻止事件冒泡
         currLinearSpeed = -linearSpeed;
@@ -541,14 +610,14 @@ $('#getPos').bind('click',function(){
 
 
     $("#left").on('touchstart', function(event) {
-        $(this).attr('src', './images/left2.png');
+        $(this).attr('src', 'ULBrainImages/lclick.png');
         event.preventDefault();
         event.stopPropagation(); // 阻止事件冒泡
         currAngularSpeed = angularSpeed
         setSending(true)
     });
     $("#right").on('touchstart', function(event) {
-        $(this).attr('src', './images/right2.png');
+        $(this).attr('src', 'ULBrainImages/rclick.png');
         event.preventDefault();
         event.stopPropagation(); // 阻止事件冒泡
         currAngularSpeed = -angularSpeed
@@ -556,28 +625,28 @@ $('#getPos').bind('click',function(){
     });
 
     $("#up").on('touchend', function(event) {
-        $(this).attr('src', './images/up.png');
+        $(this).attr('src', 'ULBrainImages/t.png');
         event.preventDefault();
         event.stopPropagation(); // 阻止事件冒泡  
         currLinearSpeed = 0
         setSending(false)
     });
     $("#down").on('touchend', function(event) {
-        $(this).attr('src', './images/down.png');
+        $(this).attr('src', 'ULBrainImages/d.png');
         event.preventDefault();
         event.stopPropagation(); // 阻止事件冒泡  
         currLinearSpeed = 0
         setSending(false)
     });
     $("#left").on('touchend', function(event) {
-        $(this).attr('src', './images/left.png');
+        $(this).attr('src', 'ULBrainImages/l.png');
         event.preventDefault();
         event.stopPropagation(); // 阻止事件冒泡
         currAngularSpeed = 0
         setSending(false)
     });
     $("#right").on('touchend', function(event) {
-        $(this).attr('src', './images/right.png');
+        $(this).attr('src', 'ULBrainImages/r.png');
         event.preventDefault();
         event.stopPropagation(); // 阻止事件冒泡
         currAngularSpeed = 0
@@ -665,35 +734,35 @@ $('#getPos').bind('click',function(){
     });
 
     $(document).bind('mouseup', function(event) {
-        $("#up").attr('src', './images/up.png');
-        $("#down").attr('src', './images/down.png');
-        $("#left").attr('src', './images/left.png');
-        $("#right").attr('src', './images/right.png');
+        $("#up").attr('src', 'ULBrainImages/t.png');
+        $("#down").attr('src', 'ULBrainImages/d.png');
+        $("#left").attr('src', 'ULBrainImages/l.png');
+        $("#right").attr('src', 'ULBrainImages/r.png');
         event.preventDefault();
         currLinearSpeed = 0;
         currAngularSpeed=0;
         setSending(false);
     });
     $("#up").bind('mousedown', function(event) {
-        $(this).attr('src', './images/up2.png');
+        $(this).attr('src', 'ULBrainImages/tclick.png');
         event.stopPropagation(); // 阻止事件冒泡
         currLinearSpeed = linearSpeed;
         setSending(true);
     });
     $("#down").bind('mousedown', function(event) {
-        $(this).attr('src', './images/down2.png');
+        $(this).attr('src', 'ULBrainImages/dclick.png');
         event.stopPropagation(); // 阻止事件冒泡
         currLinearSpeed = -linearSpeed;
         setSending(true);
     });
     $("#right").bind('mousedown', function(event) {
-        $(this).attr('src', './images/right2.png');
+        $(this).attr('src', 'ULBrainImages/rclick.png');
         event.stopPropagation(); // 阻止事件冒泡
         currAngularSpeed = -angularSpeed;
         setSending(true);
     });
     $("#left").bind('mousedown', function(event) {
-        $(this).attr('src', './images/left2.png');
+        $(this).attr('src', 'ULBrainImages/lclick.png');
         event.stopPropagation(); // 阻止事件冒泡
         currAngularSpeed = angularSpeed;
         setSending(true);
