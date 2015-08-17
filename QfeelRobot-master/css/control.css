@@ -25,6 +25,7 @@ li {list-style: none;}
 
 
 
+
 #position {display: none;height: 30px;position: fixed;width: 370px;left: 50%;margin-left: -185px;bottom: 15px;background: rgba(19,20,19,0.2);}
 #position .pos {width: 120px;height: 26px;line-height: 26px;text-align: center;display: inline-block;margin: 2px 0;color: #fff;border-right: 2px solid #ccc;}
 #position .z {border: none;}
@@ -37,13 +38,20 @@ li {list-style: none;}
 
 #directions {
     position: absolute;
-    bottom: 30px;
+    bottom: 15px;
     left: 15px;
-    height: 126.5px;
-    width: 122.5px;
+    height: 134px;
+    width: 134px;
     background: url(../ULBrainImages/bg1.png) no-repeat;
-    background-size: 122.5px 126px;
+    background-size: 134px 134px;
+    z-index: 12;
 }
+#directions>img {position: absolute;z-index: 999;}
+img#up {left: 50%;top: 6px;margin-left: -37.5px;}
+img#left {left: 3px;top: 36px;}
+img#right {right:3px;top:36px;}
+img#down {bottom: 6px;left: 50%;margin-left: -37.5px;}
+img#center {left: 50%;top: 50%;margin-left: -24px;margin-top: -25px;}
 
 #speeds {
     position: absolute;
@@ -64,16 +72,16 @@ li {list-style: none;}
 #attention {
     display: none;
     position: absolute;
-    width: 124px;
+    width: 134px;
     height: 122px;
-    top: -84px;
+    top: -82px;
     left: 1px;
     background: url(../ULBrainImages/bg2.png) no-repeat;
-    background-size: 122px 119px;
-    z-index: -1;
+    background-size: 134px 119px;
+    z-index: 10;
 }
 #attention h4 {text-align: center;font-size: 14px;color: #fff;font-weight: normal;margin-top: 5px;margin-bottom: 10px;}
-#attention div {width: 62px;float: left;font-size: 1rem;}
+#attention div {width: 62px;float: left;font-size: 1rem;margin-left: 2px;}
 
 #attention img {
     margin-left: 0px;
@@ -88,8 +96,8 @@ li {list-style: none;}
 #attentionRight{
     display: none;
     position: absolute;
-    left: 122px;
-    top: 32px;
+    left: 134px;
+    top: 36px;
     width: 90px;
     padding-top: 20px;
     height: 63px;
@@ -98,6 +106,7 @@ li {list-style: none;}
     color: #fff;
     font-weight: normal;
     font-size: 1rem;
+    z-index: 300;
 }
 #attentionRight div{
     margin-left: 10px;

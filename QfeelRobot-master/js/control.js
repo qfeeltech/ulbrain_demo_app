@@ -1,4 +1,4 @@
-// var localStorage = window.localStorage;
+  // var localStorage = window.localStorage;
 var localStorage = window.localStorage;
 
 var linearSpeed = 10; //线速度
@@ -290,21 +290,19 @@ function stopCamera()
     $.get(URL+'sensor/camera/0/stopRGBStream?sessionID=' + localStorage.sessionID, function(data) {
         console.log(data);
     });
-    var canvas=document.getElementById('videoCanvas');
-    var context=canvas.getContext('2d');
-    context.clearRect(0,0,canvas.width,canvas.height);
-    console.log('test');
+    $('#videoCanvas').hide();
     //--------摄像头关闭-----start--------
 }
 
-window.onbeforeunload = function(e) {
- e = e || window.event;
- stopCamera();
- stopOpenni();
- };
-
+window.onbeforeunload=function(e) {
+   e = e || window.event;
+      stopCamera();
+      stopOpenni();
+};
 $(document).ready(function() {
 
+    stopCamera();
+    stopOpenni();
 
     keepGetting();
     getBatteryState();
@@ -317,13 +315,15 @@ $(document).ready(function() {
     function startCamera()
     {
         //调用sensor/camera/0/getRGBStreamWS接口，请求视频流，html中使用canvas来显示
+
         $.ajax({
-                url: URL+'sensor/camera/0/getRGBStreamWS?sessionID=' + localStorage.sessionID + '&format=mp4&width=320&height=480&rate=240',
+                url: URL+'sensor/camera/0/getRGBStreamWS?sessionID=' + localStorage.sessionID + '&format=mp4&width=320&height=240&rate=300',
                 type: 'GET',
                 dataType: 'json',
                 data: "",
             })
             .done(function(data) {
+                $('#videoCanvas').show();
                 WS = data.webSocketURL;
                 console.log(WS);
                 console.log("success");
@@ -346,7 +346,16 @@ $(document).ready(function() {
 
     function getPos()
     {
-         //------------获取定位--------start-------
+         //------------获取定位--------start-------\
+         $.ajax({
+             url:URL+'rlocalization/getLocation?sessionID='+localStorage.sessionID,
+             type:'GET'
+         })
+         .done(function(data){
+             $('#position .x').html('x:'+data.coord.x);
+             $('#position .y').html('y:'+data.coord.y);
+             $('#position .z').html('z:'+data.coord.z);
+         });
          timer=setTimeout(function(){
               $.ajax({
                   url:URL+'rlocalization/getLocation?sessionID='+localStorage.sessionID,
@@ -356,8 +365,8 @@ $(document).ready(function() {
                   $('#position .x').html('x:'+data.coord.x);
                   $('#position .y').html('y:'+data.coord.y);
                   $('#position .z').html('z:'+data.coord.z);
-              getPos();
-              })
+                  getPos();
+              });
           },getPosTime);
         //------------获取定位--------end-------
     }
@@ -713,7 +722,7 @@ $('#getPos').bind('touchstart',function(event){
 
     //电脑端开始
     //
-    $("#center").bind('click', function(event) {
+    $("#center").bind('mousedown', function(event) {
         event.preventDefault();
         if($("#attention").css('display')=='block')
         {
@@ -725,8 +734,8 @@ $('#getPos').bind('touchstart',function(event){
             $("#attention,#attentionRight").css('display', 'block');
             $(this).attr('src', './images/center_blue2.png');
         }
-    });
 
+    });
 
 
     $("#up,#down,#left,#right").bind('mousedown', function(event) {
@@ -742,6 +751,7 @@ $('#getPos').bind('touchstart',function(event){
         currLinearSpeed = 0;
         currAngularSpeed=0;
         setSending(false);
+        return false;
     });
     $("#up").bind('mousedown', function(event) {
         $(this).attr('src', 'ULBrainImages/tclick.png');
