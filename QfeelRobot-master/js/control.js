@@ -4,13 +4,7 @@ var localStorage = window.localStorage;
 var linearSpeed = 10; //线速度
 var angularSpeed = 10; //角速度
 localStorage.linearSpeed = 10;
-var linearUp = false;
-var linearDown = false;
-var angularL = false;
-var angularR = false;
-var upLeft = false;
-var upRight = false;
-var downLeft = false;
+
 var downRight = false;
 
 var moveTimeout=100;
