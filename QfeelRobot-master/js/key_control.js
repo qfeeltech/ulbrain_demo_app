@@ -216,25 +216,25 @@ function stop() { //停止
 
 //按下按键  start
 function upPressed(){
-	$("#up").attr('src', './images/up2.png');
+	
 	up = true;
 	linearForward();
 }
 
 function downPressed(){
-	$("#down").attr('src', './images/down2.png');
+	
 	down = true;
 	linearBackward();
 }
 
 function leftPressed(){
-	$("#left").attr('src', './images/left2.png');
+	
 	left = true;
 	angularLeft();
 }
 
 function rightPressed(){
-	$("#right").attr('src', './images/right2.png');
+	
 	right = true;
 	angularRight();
 }
@@ -267,25 +267,25 @@ function down_rightPressed(){
 
 //松开按键  start
 function upReleased(){
-	$("#up").attr('src', './images/up.png');
+	
 	up = false;
 	stop();
 }
 
 function downReleased(){
-	$("#down").attr('src', './images/down.png');
+	
 	down = false;
 	stop();
 }
 
 function leftReleased(){
-	$("#left").attr('src', './images/left.png');
+	
 	left = false;
 	stop();
 }
 
 function rightReleased(){
-	$("#right").attr('src', './images/right.png');
+	
 	right = false;
 	stop();
 }

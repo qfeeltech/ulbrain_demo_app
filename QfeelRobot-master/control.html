@@ -9,112 +9,94 @@
     <meta content="telephone=no" name="format-detectio" >
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/control.css">
-    <title>Control</title>
+    <title>temp Control</title>
+	<script></script>
 </head>
 
 <body>
 <canvas id="videoCanvas">
 </canvas>
-
+<img src="controlIMGS/voice2.png" height="125" width="112" alt="" style="display:none;">
+<img src="controlIMGS/follow.png" height="125" width="112" alt="" style="display:none;">
+<img src="controlIMGS/record2.png" height="68" width="66" alt="" style="display:none;">
 <div id="APIButtons">
+	<div class="button button0">
+		<p>语音识别&nbsp&nbsp</p>
+		<a href="javascript:;" class="btn" id="voice"></a>
+	</div>
 	<div class="button button1">
 		<p>视频（普通）</p>
-		<img src="ULBrainImages/videoclick.png"  height="35" width="35" alt="" class="videoNormal">
-		<button id="videoNormal" class="btn btn1"></button>
+		<a href="javascript:;" class="btn btn1" id="videoNormal"></a>
 	</div>
 	<div class="button button2">
 		<p>Openni</p>
-		<img src="ULBrainImages/openNIclickclick.png" height="35" width="35" alt="" class="openni">
-		<button id="openni" class="btn btn2"></button>
+		<a href="javascript:;" class="btn btn2" id="openni"></a>
 	</div>
-
+	<div class="button button3" id="button3">
+		<p>跟随</p>
+		<a href="javascript:;" class="btn btn3" id="follow"></a>
+		<div class="follow-btn">
+			<p>记录</p>
+			<span class="follow-img"></span>
+			<a href="javascript:;" id="record"></a>
+		</div>
+	</div>
 	<div class="detailAPI">
 		<div class="button button1">
 			<p>视频（Openni）</p>
+			<span class="btn1-img"></span>
 			<a id="video" href="javascript:;"></a>
-			<img src="ULBrainImages/video.png" height="22" width="22" alt="">
-			<img src="ULBrainImages/off.png" height="23" width="65" alt="" class="switch switch1">
-
 		</div>
 		<div class="button button2">
 			<p>坐标定位</p>
+			<span class="btn2-img"></span>
 			<a href="javascript:;" id="getPos"></a>
-			<img src="ULBrainImages/position.png" height="22" width="22" alt="">
-			<img src="ULBrainImages/off.png" height="23" width="65" alt="" class="switch switch2">
 		</div>
 	</div>
-
-
 </div>
-
 <div id="position">
-<span class="pos x">x:123</span>
-<span class="pos y">y:123</span>
-<span class="pos z">z:123</span>
+	<ul class="clearfix">
+		<li class="pos x">x:123</li>
+		<li class="pos y">y:123</li>
+		<li class="pos z">z:123</li>
+	</ul>
 </div>
-
 <div id="battery">
-	<p id="battery-state">100%</p>
-	<img id="battery-img" src="./images/full.png" width="30px" >
+	<span>100%</span>
+	<strong>
+		<i></i>
+		<img src="controlIMGS/ing.png" height="16" width="10" alt="">
+	</strong>
 </div>
-<div id="directions">
-	<div id="attention">
-		<h4>注意</h4>
-		<div>
-			<img id="cliffLeft" src="./images/normal.png" width="10px;">
-			<span>左侧悬空</span>
-		</div>
-		<div>
-			<img id="bumperLeft" src="./images/normal.png" width="10px;">
-			<span>左侧碰撞</span>
-		</div>
-		<div>
-			<img id="cliffRight" src="./images/normal.png" width="10px;">
-			<span>右侧悬空</span>
-		</div>
-		<div>
-			<img id="bumperRight" src="./images/normal.png" width="10px;">
-			<span>右侧碰撞</span>
-		</div>
-		<div>
-			<img id="cliffCenter" src="./images/normal.png" width="10px;">
-			<span>中间悬空</span>
-		</div>
-		<div>
-			<img id="bumperCenter" src="./images/normal.png" width="10px;">
-			<span>中间碰撞</span>		
-		</div>
-	</div>
-	<div id="attentionRight">
-
-		<!-- 是否被提起  start -->
-		<div>
-			<img id="wheelDropLeft" src="./images/normal.png" width="10px;">
-			<span>左轮被提起</span>
-		</div>
-		<div>
-			<img id="wheelDropRight" src="./images/normal.png" width="10px;">
-			<span>右轮被提起</span>
-		</div>
-		<!-- 是否被提起  end -->
-	</div>
-
-	<img id="up" src="ULBrainImages/t.png" height="34.8px" width="75.6px">
-	<img id="left" src="ULBrainImages/l.png" width="25.2x" height="66px;">
-	<img id="center" src="ULBrainImages/c.png" height="51.2px" width="47.8px;">
-	<img id="right" src="ULBrainImages/r.png" width="25.2px" height="66px;">
-	<img id="down" src="ULBrainImages/d.png" height="34.8" width="75.6px">
+<div id="warning">
+	<div class="att"></div>
+	<ul class="warn-list">
+		<li id="bl">左侧碰撞</li>
+		<li id="cl">左侧悬空</li>
+		<li id="cr">右侧悬空</li>
+		<li id="br">右侧碰撞</li>
+		<li id="cc">中间悬空</li>
+		<li id="bc">中间碰撞</li>
+		<li id="wl">左轮被提起</li>
+		<li id="wr">右轮被提起</li>
+	</ul>
 </div>
+<div class="alert alert-dismissable" id="alert">
+	与机器人连接已断开，请重新连接。
+	<button class="close" data-dismiss="alert">&times;</button>
+</div>
+<div id="left"></div>
+<div id="right"></div>
+<div id="up"></div>
+<div id="down"></div>
 <div id="speeds">
-	<img id="speedup" src="./images/add.png" width="43px" style="margin-left:50px">
-	<p id="speedstate">1</p>
-	<img id="speeddown" src="./images/dec.png" width="43px" style="margin-left: 50px;margin-top: 0px;">
+	<div id="speedup" class="speedBtn"></div>
+	<p><span id="speedstate">1</span>×</p>
+	<div id="speeddown" class="speedBtn"></div>
 </div>
 </body>
 	<script src="js/jquery.min.js"></script>
 	<script src="js/control.js"></script>    <!-- 电脑与手机点击控制机器人 -->
-	<script src="js/keypress-2.1.0.min.js"></script>   
-	<script src="js/key_control.js"></script>     <!-- 键盘控制机器人 -->
 	<script src="js/jsmpg.js"></script>
-	
+	<script src="js/bootstrap.min.js"></script>
 </html>
